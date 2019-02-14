@@ -1,4 +1,4 @@
-package logs
+package armory
 
 import (
 	"os"
@@ -6,6 +6,10 @@ import (
 	"strings"
 	"time"
 )
+
+type logs struct{}
+
+var Log *logs
 
 var logFiles []*os.File
 
@@ -50,7 +54,7 @@ func clippingLog() {
 }
 
 // DailyRotateLog DailyRotateLog
-func DailyRotateLog(path *string) *os.File {
+func (*logs) DailyRotateLog(path *string) *os.File {
 	f, _ := os.OpenFile(*path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	logFiles = append(logFiles, f)
 	return f

@@ -1,4 +1,4 @@
-package numbers
+package armory
 
 import (
 	"math"
@@ -6,14 +6,18 @@ import (
 	"time"
 )
 
+type number struct{}
+
+var Number *number
+
 // RandomIntBetween RandomIntBetween
-func RandomIntBetween(min int, max int) int {
+func (*number) RandomIntBetween(min int, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	return min + rand.Intn(max-min)
 }
 
 // RandomInt RandomInt
-func RandomInt() int {
+func (*number) RandomInt() int {
 	max := int(math.Pow(10, 10))
 	return RandomIntBetween(0, max)
 }
