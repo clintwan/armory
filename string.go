@@ -41,8 +41,8 @@ func (s *str) PrettyJSON(bts []byte) (*string, error) {
 	return s.ParseJSON(v, true)
 }
 
-// MD5 MD5 Encode
-func (s *str) MD5(source *[]byte) *string {
+// MD5Encode MD5 Encode
+func (s *str) MD5Encode(source *[]byte) *string {
 	r := fmt.Sprintf("%x", md5.Sum(*source))
 	return &r
 }
@@ -51,7 +51,7 @@ func (s *str) MD5(source *[]byte) *string {
 func (s *str) RandomString() *string {
 	rand.Seed(time.Now().UnixNano())
 	b := []byte(strconv.Itoa(rand.Int()))
-	return s.MD5(&b)
+	return s.MD5Encode(&b)
 }
 
 // DesEncrypt DesEncrypt
