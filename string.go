@@ -19,6 +19,7 @@ import (
 
 type str struct{}
 
+// String string
 var String *str
 
 // ParseJSON 解析json
@@ -30,7 +31,7 @@ func (s *str) ParseJSON(v interface{}, pretty bool) (*string, error) {
 	}
 	encoder.SetEscapeHTML(false)
 	err := encoder.Encode(v)
-	c := string(buffer.Bytes())
+	c := string(bytes.TrimSpace(buffer.Bytes()))
 	return &c, err
 }
 
