@@ -3,3 +3,5 @@
 .DS_Store
 bin
 go.sum
+private.pem
+public.pem
