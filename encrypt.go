@@ -19,8 +19,8 @@ type encrypt struct{}
 // Encrypt encrypt
 var Encrypt *encrypt
 
-// GenerateRsaKey GenerateRsaKey
-func (s *encrypt) GenerateRsaKey(bit int, privateKeyPath, publicKeyPath string) error {
+// RsaGenerateKey RsaGenerateKey
+func (s *encrypt) RsaGenerateKey(bit int, privateKeyPath, publicKeyPath string) error {
 	private, err := rsa.GenerateKey(rand.Reader, bit)
 	if err != nil {
 		return err
@@ -85,8 +85,8 @@ func (s *encrypt) RsaSignature(sourceData, privateKey []byte) ([]byte, error) {
 	return res, nil
 }
 
-// VerifyRSA VerifyRSA
-func (s *encrypt) VerifyRsaSignature(sourceData, signedData, publicKey []byte) error {
+// RsaVerifySignature RsaVerifySignature
+func (s *encrypt) RsaVerifySignature(sourceData, signedData, publicKey []byte) error {
 	//pem解密
 	block, _ := pem.Decode(publicKey)
 	publicInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
