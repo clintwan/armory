@@ -19,7 +19,7 @@ func TestMain(m *testing.M) {
 func setup() {
 	privateKeyPath := "./private.pem"
 	publicKeyPath := "./public.pem"
-	Encrypt.GenerateRsaKey(1024, privateKeyPath, publicKeyPath)
+	Encrypt.RsaGenerateKey(1024, privateKeyPath, publicKeyPath)
 	var err error
 	publicKey, err = ioutil.ReadFile(publicKeyPath)
 	if err != nil {
@@ -52,7 +52,7 @@ func TestRsaSignature(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	err = Encrypt.VerifyRsaSignature(sourceData, signData, publicKey)
+	err = Encrypt.RsaSignatureVerify(sourceData, signData, publicKey)
 	if err != nil {
 		fmt.Println("校验出错:", err)
 	} else {
