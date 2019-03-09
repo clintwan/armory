@@ -33,17 +33,17 @@ func setup() {
 func TestRsaEncrypt(t *testing.T) {
 	sourceData := []byte("asdf123456789")
 
-	bts, err := Encrypt.RsaEncryptWithPublicKey(sourceData, publicKey)
+	bts, err := Encrypt.RsaEncrypt(sourceData, publicKey)
 	if err != nil {
 		fmt.Println(err)
 	}
 	// fmt.Println(string(bts))
 
-	r, err := Encrypt.RsaDecryptWithPrivateKey(bts, privateKey)
+	r, err := Encrypt.RsaDecrypt(bts, privateKey)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(string(r))
+	fmt.Println(string(r) == string(sourceData))
 }
 
 func TestRsaSignature(t *testing.T) {

@@ -107,8 +107,8 @@ func (s *encrypt) RsaSignatureVerify(sourceData, signedData, publicKey []byte) e
 	return nil
 }
 
-// RsaEncryptWithPublicKey RsaEncryptWithPublicKey
-func (s *encrypt) RsaEncryptWithPublicKey(origData, publicKey []byte) ([]byte, error) {
+// RsaEncrypt RsaEncrypt
+func (s *encrypt) RsaEncrypt(origData, publicKey []byte) ([]byte, error) {
 	block, _ := pem.Decode(publicKey)
 	if block == nil {
 		return nil, errors.New("public key error")
@@ -121,8 +121,8 @@ func (s *encrypt) RsaEncryptWithPublicKey(origData, publicKey []byte) ([]byte, e
 	return rsa.EncryptPKCS1v15(rand.Reader, pub, origData)
 }
 
-// RsaDecryptWithPrivateKey RsaDecryptWithPrivateKey
-func (s *encrypt) RsaDecryptWithPrivateKey(ciphertext, privateKey []byte) ([]byte, error) {
+// RsaDecrypt RsaDecrypt
+func (s *encrypt) RsaDecrypt(ciphertext, privateKey []byte) ([]byte, error) {
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
 		return nil, errors.New("private key error")
