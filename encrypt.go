@@ -69,6 +69,9 @@ func (s *encrypt) RsaSignature(sourceData, privateKey []byte) ([]byte, error) {
 	msg := []byte("")
 	//解析
 	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("private key error")
+	}
 	pKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
 		return msg, err
@@ -89,6 +92,9 @@ func (s *encrypt) RsaSignature(sourceData, privateKey []byte) ([]byte, error) {
 func (s *encrypt) RsaSignatureVerify(sourceData, signedData, publicKey []byte) error {
 	//pem解密
 	block, _ := pem.Decode(publicKey)
+	if block == nil {
+		return errors.New("public key error")
+	}
 	publicInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
 		return err
