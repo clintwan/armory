@@ -5,12 +5,15 @@ import (
 	"crypto"
 	"crypto/cipher"
 	"crypto/des"
+	"crypto/md5"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"hash"
 	"os"
 )
 
@@ -64,8 +67,22 @@ func (s *encrypt) RsaGenerateKey(bit int, privateKeyPath, publicKeyPath string) 
 	return nil
 }
 
-// SignatureRSA SignatureRSA
-func (s *encrypt) RsaSignature(sourceData, privateKey []byte) ([]byte, error) {
+// RsaSignatureWithMD5 RsaSignatureWithMD5
+func (s *encrypt) RsaSignatureWithMD5(sourceData, privateKey []byte) ([]byte, error) {
+	return s.rsaSignature(sourceData, md5.New(), crypto.MD5, privateKey)
+}
+
+// RsaSignatureWithSha1 RsaSignatureWithSha1
+func (s *encrypt) RsaSignatureWithSha1(sourceData, privateKey []byte) ([]byte, error) {
+	return s.rsaSignature(sourceData, sha1.New(), crypto.SHA1, privateKey)
+}
+
+// RsaSignatureWithSha256 RsaSignatureWithSha256
+func (s *encrypt) RsaSignatureWithSha256(sourceData, privateKey []byte) ([]byte, error) {
+	return s.rsaSignature(sourceData, sha256.New(), crypto.SHA256, privateKey)
+}
+
+func (s *encrypt) rsaSignature(sourceData []byte, checksum hash.Hash, hash crypto.Hash, privateKey []byte) ([]byte, error) {
 	msg := []byte("")
 	//解析
 	block, _ := pem.Decode(privateKey)
@@ -77,19 +94,32 @@ func (s *encrypt) RsaSignature(sourceData, privateKey []byte) ([]byte, error) {
 		return msg, err
 	}
 	//哈希加密
-	myHash := sha256.New()
-	myHash.Write(sourceData)
-	hashRes := myHash.Sum(nil)
+	checksum.Write(sourceData)
+	hashRes := checksum.Sum(nil)
 	//对哈希结果进行签名
-	res, err := rsa.SignPKCS1v15(rand.Reader, pKey, crypto.SHA256, hashRes)
+	res, err := rsa.SignPKCS1v15(rand.Reader, pKey, hash, hashRes)
 	if err != nil {
 		return msg, err
 	}
 	return res, nil
 }
 
-// RsaSignatureVerify RsaSignatureVerify
-func (s *encrypt) RsaSignatureVerify(sourceData, signedData, publicKey []byte) error {
+// RsaSignatureWithMD5Verify RsaSignatureWithMD5Verify
+func (s *encrypt) RsaSignatureVerifyWithMD5(sourceData, signedData, publicKey []byte) error {
+	return s.rsaSignatureVerify(sourceData, signedData, md5.New(), crypto.MD5, publicKey)
+}
+
+// RsaSignatureWithSha1Verify RsaSignatureWithSha1Verify
+func (s *encrypt) RsaSignatureVerifyWithSha1(sourceData, signedData, publicKey []byte) error {
+	return s.rsaSignatureVerify(sourceData, signedData, sha1.New(), crypto.SHA1, publicKey)
+}
+
+// RsaSignatureWithSha256Verify RsaSignatureWithSha256Verify
+func (s *encrypt) RsaSignatureVerifyWithSha256(sourceData, signedData, publicKey []byte) error {
+	return s.rsaSignatureVerify(sourceData, signedData, sha256.New(), crypto.SHA256, publicKey)
+}
+
+func (s *encrypt) rsaSignatureVerify(sourceData, signedData []byte, checksum hash.Hash, hash crypto.Hash, publicKey []byte) error {
 	//pem解密
 	block, _ := pem.Decode(publicKey)
 	if block == nil {
@@ -101,12 +131,11 @@ func (s *encrypt) RsaSignatureVerify(sourceData, signedData, publicKey []byte) e
 	}
 	pKey := publicInterface.(*rsa.PublicKey)
 	//元数据哈希加密
-	mySha := sha256.New()
-	mySha.Write(sourceData)
-	res := mySha.Sum(nil)
+	checksum.Write(sourceData)
+	hashRes := checksum.Sum(nil)
 
 	//校验签名
-	err = rsa.VerifyPKCS1v15(pKey, crypto.SHA256, res, signedData)
+	err = rsa.VerifyPKCS1v15(pKey, hash, hashRes, signedData)
 	if err != nil {
 		return err
 	}
