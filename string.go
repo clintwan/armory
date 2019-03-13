@@ -73,17 +73,6 @@ func (s *str) RandomString() *string {
 	return s.MD5Encode(&b)
 }
 
-// FindStringInSlice FindStringInSlice
-func (s *str) FindStringInSlice(sa *[]string, str string) int {
-	idx := -1
-	for i, s := range *sa {
-		if s == str {
-			idx = i
-		}
-	}
-	return idx
-}
-
 // GetIntArray getIntArray
 func (s *str) GetIntArray(str *string) *[]int {
 	arr := []int{}
