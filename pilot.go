@@ -7,11 +7,11 @@ import (
 
 type pilot struct{}
 
+// Pilot Pilot
 var Pilot *pilot
 
 // AppPath AppPath
-func (p *pilot) AppPath(subPath *string) *string {
+func (p *pilot) AppPath(subPath string) string {
 	rootPath, _ := os.Executable()
-	s := filepath.Join(filepath.Dir(rootPath), *subPath)
-	return &s
+	return filepath.Join(filepath.Dir(rootPath), subPath)
 }

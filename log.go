@@ -54,8 +54,8 @@ func clippingLog() {
 }
 
 // DailyRotateLog DailyRotateLog
-func (l *logs) DailyRotateLog(path *string) *os.File {
-	f, _ := os.OpenFile(*path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+func (l *logs) DailyRotateLog(path string) *os.File {
+	f, _ := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	logFiles = append(logFiles, f)
 	return f
 }

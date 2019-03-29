@@ -41,7 +41,7 @@ func (s *str) GbkToUtf8(bts []byte) ([]byte, error) {
 }
 
 // ParseJSON 解析json
-func (s *str) ParseJSON(v interface{}, pretty bool) (*string, error) {
+func (s *str) ParseJSON(v interface{}, pretty bool) (string, error) {
 	buffer := &bytes.Buffer{}
 	encoder := json.NewEncoder(buffer)
 	if pretty {
@@ -50,39 +50,39 @@ func (s *str) ParseJSON(v interface{}, pretty bool) (*string, error) {
 	encoder.SetEscapeHTML(false)
 	err := encoder.Encode(v)
 	c := string(bytes.TrimSpace(buffer.Bytes()))
-	return &c, err
+	return c, err
 }
 
 // PrettyJSON 美化json
-func (s *str) PrettyJSON(bts []byte) (*string, error) {
+func (s *str) PrettyJSON(bts []byte) (string, error) {
 	v := interface{}(nil)
 	json.Unmarshal(bts, &v)
 	return s.ParseJSON(v, true)
 }
 
 // MD5Encode MD5 Encode
-func (s *str) MD5Encode(source *[]byte) *string {
-	r := fmt.Sprintf("%x", md5.Sum(*source))
-	return &r
+func (s *str) MD5Encode(source []byte) string {
+	r := fmt.Sprintf("%x", md5.Sum(source))
+	return r
 }
 
 // RandomString RandomString
-func (s *str) RandomString() *string {
+func (s *str) RandomString() string {
 	rand.Seed(time.Now().UnixNano())
 	b := []byte(strconv.Itoa(rand.Int()))
-	return s.MD5Encode(&b)
+	return s.MD5Encode(b)
 }
 
 // GetIntArray getIntArray
-func (s *str) GetIntArray(str *string) *[]int {
+func (s *str) GetIntArray(str string) []int {
 	arr := []int{}
-	if len(*str) > 0 {
-		for _, s := range strings.Split(*str, ",") {
+	if len(str) > 0 {
+		for _, s := range strings.Split(str, ",") {
 			i, _ := strconv.Atoi(s)
 			if i > 0 {
 				arr = append(arr, i)
 			}
 		}
 	}
-	return &arr
+	return arr
 }
