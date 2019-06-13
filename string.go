@@ -3,7 +3,6 @@ package armory
 import (
 	"bytes"
 	"crypto/md5"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -38,26 +37,6 @@ func (s *str) GbkToUtf8(bts []byte) ([]byte, error) {
 		return nil, e
 	}
 	return d, nil
-}
-
-// ParseJSON 解析json
-func (s *str) ParseJSON(v interface{}, pretty bool) (string, error) {
-	buffer := &bytes.Buffer{}
-	encoder := json.NewEncoder(buffer)
-	if pretty {
-		encoder.SetIndent("", "    ")
-	}
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(v)
-	c := string(bytes.TrimSpace(buffer.Bytes()))
-	return c, err
-}
-
-// PrettyJSON 美化json
-func (s *str) PrettyJSON(bts []byte) (string, error) {
-	v := interface{}(nil)
-	json.Unmarshal(bts, &v)
-	return s.ParseJSON(v, true)
 }
 
 // MD5Encode MD5 Encode
