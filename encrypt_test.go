@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 func setup() {
 	privateKeyPath := "./private.pem"
 	publicKeyPath := "./public.pem"
-	Encrypt.RsaGenerateKey(1024, privateKeyPath, publicKeyPath)
+	Encrypt.RsaGenerateKey(2048, privateKeyPath, publicKeyPath)
 	var err error
 	publicKey, err = ioutil.ReadFile(publicKeyPath)
 	if err != nil {
