@@ -1,4 +1,4 @@
-module github.com/wantg/armory
+module github.com/clintwan/armory
 
 go 1.12
 
