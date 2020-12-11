@@ -11,7 +11,7 @@ type pilot struct{}
 var Pilot *pilot
 
 // AppPath AppPath
-func (p *pilot) AppPath(subPath string) string {
+func (p *pilot) AppPath(subPath ...string) string {
 	rootPath, _ := os.Executable()
-	return filepath.Join(filepath.Dir(rootPath), subPath)
+	return filepath.Join(append([]string{filepath.Dir(rootPath)}, subPath...)...)
 }
